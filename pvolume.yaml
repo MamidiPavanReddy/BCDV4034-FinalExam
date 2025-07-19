@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: azure-blob-pv
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: azureblob-fuse
+  csi:
+    driver: blob.csi.azure.com
+    readOnly: false
+    volumeHandle: azureblob-fuse-pv
+    volumeAttributes:
+      containerName: akscontainer
+      storageAccount: aksstoreblobdemo
+    nodeStageSecretRef:
+      name: azure-secret
+      namespace: default

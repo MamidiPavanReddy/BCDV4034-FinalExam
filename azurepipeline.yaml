@@ -1,0 +1,19 @@
+pool: default
+
+steps:
+- script: |
+    git clone https://github.com/Azure-Samples/aks-store-demo.git
+  displayName: 'Clone AKS Store Demo Repository'
+
+
+- task: Kubernetes@1
+  inputs:
+    connectionType: 'Kubernetes Service Connection'
+    kubernetesServiceEndpoint: 'aks-store'
+    namespace: 'aks-store'
+    command: 'apply'
+    arguments: '-k $(Build.SourcesDirectory)/aks-store-demo/kustomize/overlays/dev'
+    secretType: 'dockerRegistry'
+    containerRegistryType: 'Azure Container Registry'
+    checkLatest: true
+  displayName: 'Deploy aks-store demo'

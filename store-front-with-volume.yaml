@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: store-front
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: store-front
+  template:
+    metadata:
+      labels:
+        app: store-front
+    spec:
+      containers:
+        - name: store-front
+          image: ghcr.io/azure-samples/aks-store-demo/store-front:latest
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - mountPath: /mnt/blob
+              name: azure-blob-volume
+      volumes:
+        - name: azure-blob-volume
+          persistentVolumeClaim:
+            claimName: azure-blob-pvc
